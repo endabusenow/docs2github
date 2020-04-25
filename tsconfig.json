@@ -4,11 +4,8 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
-    "target": "ES6"
+    "target": "ES5"
   },
-  "include": [
-    "Code.ts",
-    "**/*.ts"
-  ],
+  "include": ["**/*.ts"],
   "types": ["google-apps-script"]
 }
