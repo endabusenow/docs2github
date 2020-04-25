@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "target": "ES6"
+  },
+  "include": [
+    "Code.ts",
+    "**/*.ts"
+  ],
+  "types": ["google-apps-script"]
+}
