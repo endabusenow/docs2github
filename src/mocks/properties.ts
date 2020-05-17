@@ -1,20 +1,37 @@
-const properties = new Map();
+/** Mocks a Google AppsScript Properties object.
+ * https://developers.google.com/apps-script/reference/properties/properties
+ */
+export class Properties {
+  propertiesStore: Map<string, string> = new Map();
 
-export class DocumentProperties {
-  static setProperty(name: string, value: string): void {
-    properties.set(name, value);
+  setProperty(name: string, value: string): void {
+    this.propertiesStore.set(name, value);
   }
 
-  static getProperty(name: string): string | null {
-    const value = properties.get(name);
+  getProperty(name: string): string | null {
+    const value = this.propertiesStore.get(name);
     if (value === undefined) return null;
     return value;
+  }
+
+  deleteAllProperties() {
+    this.propertiesStore.clear();
   }
 }
 
 export class PropertiesService {
-  static getDocumentProperties(): DocumentProperties {
-    return DocumentProperties;
+  static documentProperties = new Properties();
+
+  static getDocumentProperties(): Properties {
+    return this.documentProperties;
+  }
+}
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      PropertiesService: typeof PropertiesService;
+    }
   }
 }
 
