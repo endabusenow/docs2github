@@ -1,7 +1,7 @@
 import "./mocks/properties";
 import { getRepositories, setRepositories } from "./repositories";
 
-describe("repositories", () => {
+describe("Repositories", () => {
   test("setRepositories then getRepositories", () => {
     const repositories = [
       {
