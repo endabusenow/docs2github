@@ -5,6 +5,14 @@ import { Repository, getRepositories } from "./repositories";
 // a document should be more than sufficient.
 const NUM_MAX_REPOSITORIES = 100;
 
+function exportToGitHubTemplate(i: number) {
+  return `exportToGitHub_${i}`;
+}
+
+function unlinkRepositoryTemplate(i: number) {
+  return `unlinkRepository_${i}`;
+}
+
 /**
  * Creates or updates the Google Docs Add-ons menu.
  * @param authMode - The script's authorization level.
@@ -22,11 +30,8 @@ export function updateMenu(authMode: GoogleAppsScript.Script.AuthMode) {
       const repo: Repository = repos[i];
       const submenu = ui.createMenu(repo.name);
 
-      const exporterName = `exportToGitHub_${i}`;
-      const unlinkerName = `removeRepository_${i}`;
-
-      submenu.addItem("Export to GitHub", `${exporterName}`);
-      submenu.addItem("Unlink", `${unlinkerName}`);
+      submenu.addItem("Export to GitHub", exportToGitHubTemplate(i));
+      submenu.addItem("Unlink", unlinkRepositoryTemplate(i));
 
       menu.addSubMenu(submenu);
     }
@@ -57,10 +62,11 @@ function createUnlinkerCallback(repo_index: number) {
   };
 }
 
+// TODO(tylerhou): Migrate to non-global scope with V8 AppsScript engine.
 function setupRepositoryCallbacks(scope: any) {
   for (let i = 0; i < NUM_MAX_REPOSITORIES; ++i) {
-    scope[`exportToGitHub_${i}`] = createExporterCallback(i);
-    scope[`removeRepository_${i}`] = createUnlinkerCallback(i);
+    scope[exportToGitHubTemplate(i)] = createExporterCallback(i);
+    scope[unlinkRepositoryTemplate(i)] = createUnlinkerCallback(i);
   }
 }
 
