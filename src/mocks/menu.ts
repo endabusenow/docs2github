@@ -30,12 +30,14 @@ export class Menu {
   caption: string;
   items: Array<MenuItem | Menu | Separator>;
   added = false;
+  isAddonMenu: boolean;
   ui: Ui;
 
-  constructor(caption: string, ui: Ui) {
+  constructor(caption: string, ui: Ui, isAddonMenu: boolean = false) {
     this.caption = caption;
     this.items = [];
     this.ui = ui;
+    this.isAddonMenu = isAddonMenu;
   }
 
   addItem(caption: string, functionName: string): Menu {
@@ -61,7 +63,11 @@ export class Menu {
 
   addToUi(): void {
     this.__checkAndAdd();
-    this.ui.__addMenu(this);
+    if (this.isAddonMenu) {
+      this.ui.__setAddonMenu(this);
+    } else {
+      this.ui.__addMenu(this);
+    }
   }
 
   /** Returns the list of items. This method is for testing and is not in in

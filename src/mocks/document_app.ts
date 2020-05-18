@@ -9,3 +9,13 @@ export class DocumentApp {
     return this.ui;
   }
 }
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      DocumentApp: DocumentApp;
+    }
+  }
+}
+
+global.DocumentApp = DocumentApp;

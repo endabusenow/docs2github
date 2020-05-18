@@ -1,4 +1,5 @@
 import { Ui } from "./ui";
+import { Menu } from "./menu";
 
 describe("Menu", () => {
   test("add items to the menu", () => {
@@ -31,7 +32,7 @@ describe("Menu", () => {
     const item = menu._getItems()[0];
     expect(item.brand == "MenuItem").toBe(true);
     if (item.brand !== "MenuItem") {
-      fail();
+      throw new Error("item is not MenuItem");
     }
 
     const mockCallback = jest.fn();
@@ -91,6 +92,34 @@ describe("Menu", () => {
     const secondMenu = secondUi.createMenu("bar");
 
     expect(() => firstMenu.addSubMenu(secondMenu)).toThrowError("same");
+  });
+
+  describe("addon menu", () => {
+    test("create and add", () => {
+      const ui = new Ui();
+      ui.createAddonMenu().addItem("foo", "bar").addToUi();
+
+      const addonMenu: Menu | null = ui._getAddonMenu();
+      expect(addonMenu).not.toBeNull();
+      if (addonMenu === null) {
+        throw new Error("Expected addon menu not to be null");
+      }
+      expect(addonMenu._getItems()).toHaveLength(1);
+    });
+
+    test("can only add one addon menu", () => {
+      const ui = new Ui();
+      ui.createAddonMenu().addItem("foo", "bar").addToUi();
+      const second = ui.createAddonMenu().addItem("bar", "baz");
+      expect(() => second.addToUi()).toThrowError("Only one");
+    });
+
+    test("addon menu can only be added once", () => {
+      const ui = new Ui();
+      const menu = ui.createAddonMenu().addItem("foo", "bar");
+      menu.addToUi();
+      expect(() => menu.addToUi()).toThrowError("once");
+    });
   });
 });
 
