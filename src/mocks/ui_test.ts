@@ -1,63 +1,117 @@
 import { Ui } from "./ui";
 
 describe("Ui", () => {
-  test("add menu", () => {
-    const ui = new Ui();
-    expect(ui._getMenus()).toHaveLength(0);
+  describe("menu", () => {
+    test("add menu", () => {
+      const ui = new Ui();
+      expect(ui._getMenus()).toHaveLength(0);
 
-    const menu = ui.createMenu("foo");
-    expect(ui._getMenus()).toHaveLength(0);
+      const menu = ui.createMenu("foo");
+      expect(ui._getMenus()).toHaveLength(0);
 
-    menu.addToUi();
-    expect(ui._getMenus()).toHaveLength(1);
+      menu.addToUi();
+      expect(ui._getMenus()).toHaveLength(1);
+    });
+
+    test("click menu", () => {
+      const ui = new Ui();
+      const menu = ui.createMenu("foo");
+      menu.addItem("bar", "menuFunction");
+      menu.addToUi();
+
+      const mockCallback = jest.fn();
+      global.menuFunction = mockCallback;
+      const item = ui._getMenus()[0]._getItems()[0];
+
+      expect(item.brand === "MenuItem").toBe(true);
+      if (item.brand !== "MenuItem") {
+        fail();
+      }
+
+      item._click();
+      expect(mockCallback.mock.calls).toHaveLength(1);
+    });
+
+    test("click submenu", () => {
+      const ui = new Ui();
+      const menu = ui.createMenu("foo");
+
+      const submenu = ui.createMenu("bar");
+      submenu.addItem("baz", "menuFunction");
+
+      menu.addSubMenu(submenu);
+      menu.addToUi();
+
+      const mockCallback = jest.fn();
+      global.menuFunction = mockCallback;
+      const sub = ui._getMenus()[0]._getItems()[0];
+
+      expect(sub.brand === "Menu").toBe(true);
+      if (sub.brand !== "Menu") {
+        fail();
+      }
+
+      const item = sub._getItems()[0];
+      expect(item.brand === "MenuItem").toBe(true);
+      if (item.brand !== "MenuItem") {
+        fail();
+      }
+
+      item._click();
+      expect(mockCallback.mock.calls).toHaveLength(1);
+    });
   });
 
-  test("click menu", () => {
-    const ui = new Ui();
-    const menu = ui.createMenu("foo");
-    menu.addItem("bar", "menuFunction");
-    menu.addToUi();
+  describe("prompt", () => {
+    test("prompt(prompt) returns correct response", () => {
+      const ui = new Ui();
+      ui._setNextPromptResponseResponseText("foo");
+      ui._setNextPromptResponseSelectedButton(Ui.Button.OK);
 
-    const mockCallback = jest.fn();
-    global.menuFunction = mockCallback;
-    const item = ui._getMenus()[0]._getItems()[0];
+      const prompt = ui.prompt("Question?");
+      expect(prompt.getResponseText()).toBe("foo");
+      expect(prompt.getSelectedButton()).toBe(Ui.Button.OK);
+    });
 
-    expect(item.brand === "MenuItem").toBe(true);
-    if (item.brand !== "MenuItem") {
-      fail();
-    }
+    test("prompt(prompt, buttons) returns correct response", () => {
+      const ui = new Ui();
+      ui._setNextPromptResponseResponseText("foo");
+      ui._setNextPromptResponseSelectedButton(Ui.Button.YES);
 
-    item._click();
-    expect(mockCallback.mock.calls).toHaveLength(1);
-  });
+      const prompt = ui.prompt("Question?", Ui.ButtonSet.YES_NO);
+      expect(prompt.getResponseText()).toBe("foo");
+      expect(prompt.getSelectedButton()).toBe(Ui.Button.YES);
+    });
 
-  test("click submenu", () => {
-    const ui = new Ui();
-    const menu = ui.createMenu("foo");
+    test("prompt(title, prompt, buttons) returns correct response", () => {
+      const ui = new Ui();
+      ui._setNextPromptResponseResponseText("foo");
+      ui._setNextPromptResponseSelectedButton(Ui.Button.YES);
 
-    const submenu = ui.createMenu("bar");
-    submenu.addItem("baz", "menuFunction");
+      const prompt = ui.prompt("Title", "Question?", Ui.ButtonSet.YES_NO);
+      expect(prompt.getResponseText()).toBe("foo");
+      expect(prompt.getSelectedButton()).toBe(Ui.Button.YES);
+    });
 
-    menu.addSubMenu(submenu);
-    menu.addToUi();
+    test("prompt(prompt, buttons) throws if button is not in ButtonSet", () => {
+      const ui = new Ui();
+      ui._setNextPromptResponseResponseText("foo");
+      ui._setNextPromptResponseSelectedButton(Ui.Button.OK);
 
-    const mockCallback = jest.fn();
-    global.menuFunction = mockCallback;
-    const sub = ui._getMenus()[0]._getItems()[0];
+      expect(() => ui.prompt("Question?", Ui.ButtonSet.YES_NO)).toThrowError(
+        "not in ButtonSet"
+      );
+    });
 
-    expect(sub.brand === "Menu").toBe(true);
-    if (sub.brand !== "Menu") {
-      fail();
-    }
+    test("prompt(title, prompt, buttons) throws if button is not in ButtonSet", () => {
+      const ui = new Ui();
+      ui._setNextPromptResponseResponseText("foo");
+      ui._setNextPromptResponseSelectedButton(Ui.Button.OK);
 
-    const item = sub._getItems()[0];
-    expect(item.brand === "MenuItem").toBe(true);
-    if (item.brand !== "MenuItem") {
-      fail();
-    }
-
-    item._click();
-    expect(mockCallback.mock.calls).toHaveLength(1);
+      expect(() =>
+        ui.prompt("Title", "Question?", Ui.ButtonSet.YES_NO)
+      ).toThrowError("not in ButtonSet");
+    });
   });
 });
 
