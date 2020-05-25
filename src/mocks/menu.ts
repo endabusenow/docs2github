@@ -14,6 +14,7 @@ class MenuItem {
   /** Calls the function associated with this MenuItem. This method is for
    * testing and not in the official API. */
   _click() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any)[this.functionName]();
   }
 }
@@ -33,7 +34,7 @@ export class Menu {
   isAddonMenu: boolean;
   ui: Ui;
 
-  constructor(caption: string, ui: Ui, isAddonMenu: boolean = false) {
+  constructor(caption: string, ui: Ui, isAddonMenu = false) {
     this.caption = caption;
     this.items = [];
     this.ui = ui;

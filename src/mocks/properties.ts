@@ -14,7 +14,7 @@ export class Properties {
     return value;
   }
 
-  deleteAllProperties() {
+  deleteAllProperties(): void {
     this.propertiesStore.clear();
   }
 }
@@ -28,6 +28,7 @@ export class PropertiesService {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Global {
       PropertiesService: typeof PropertiesService;

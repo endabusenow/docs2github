@@ -1,4 +1,4 @@
-const REPOSITORIES: string = "repositories";
+const REPOSITORIES = "repositories";
 
 export interface Repository {
   name: string;
@@ -25,7 +25,7 @@ export function getRepositories(): Repository[] {
  * Sets the list of repositories that this document is linked to.
  * @param repos - The list of repositories to which to link this document.
  */
-export function setRepositories(repos: Repository[]) {
+export function setRepositories(repos: Repository[]): void {
   const properties = PropertiesService.getDocumentProperties();
   properties.setProperty(REPOSITORIES, JSON.stringify(repos));
 }

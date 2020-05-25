@@ -17,7 +17,7 @@ function unlinkRepositoryTemplate(i: number) {
  * Creates or updates the Google Docs Add-ons menu.
  * @param authMode - The script's authorization level.
  */
-export function updateMenu(authMode: GoogleAppsScript.Script.AuthMode) {
+export function updateMenu(authMode: GoogleAppsScript.Script.AuthMode): void {
   const ui = DocumentApp.getUi();
   const menu = ui.createAddonMenu();
   menu.addItem("Link repository", "linkRepositoryCallback");
@@ -39,9 +39,11 @@ export function updateMenu(authMode: GoogleAppsScript.Script.AuthMode) {
   menu.addToUi();
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: tsc thinks this function is never read, but it's referred to by
 // the string name instead.
-function linkRepositoryCallback() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function linkRepositoryCallback(): void {
   Logger.log("Linking repository ", name);
   updateMenu(ScriptApp.AuthMode.FULL);
 }
@@ -63,6 +65,7 @@ function createUnlinkerCallback(repo_index: number) {
 }
 
 // TODO(tylerhou): Migrate to non-global scope with V8 AppsScript engine.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setupRepositoryCallbacks(scope: any) {
   for (let i = 0; i < NUM_MAX_REPOSITORIES; ++i) {
     scope[exportToGitHubTemplate(i)] = createExporterCallback(i);
@@ -70,5 +73,7 @@ function setupRepositoryCallbacks(scope: any) {
   }
 }
 
+let global;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: No declaration for this type, so it triggers "noImplicitAny"
-setupRepositoryCallbacks(this);
+setupRepositoryCallbacks(this || global);

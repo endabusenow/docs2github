@@ -5,12 +5,13 @@ import { Ui } from "./ui";
  */
 export class DocumentApp {
   static ui = new Ui();
-  public static getUi() {
+  public static getUi(): Ui {
     return this.ui;
   }
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Global {
       DocumentApp: DocumentApp;

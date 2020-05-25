@@ -9,17 +9,17 @@ export class Ui {
     this.menus = [];
   }
 
-  createMenu(caption: string) {
+  createMenu(caption: string): Menu {
     const menu = new Menu(caption, this);
     return menu;
   }
 
-  createAddonMenu() {
+  createAddonMenu(): Menu {
     return new Menu("", this, /*addon=*/ true);
   }
 
   // TODO(tylerhou): Consolidate this with setAddonMenu?
-  __addMenu(menu: Menu) {
+  __addMenu(menu: Menu): void {
     if (this !== menu.ui) {
       throw new Error("Added menu must have same Ui");
     }
@@ -29,7 +29,7 @@ export class Ui {
     this.menus.push(menu);
   }
 
-  __setAddonMenu(menu: Menu) {
+  __setAddonMenu(menu: Menu): void {
     if (this !== menu.ui) {
       throw new Error("Added menu must have same Ui");
     }
@@ -48,6 +48,8 @@ export class Ui {
     return this.menus;
   }
 
+  /** Retrieves the addon menu. This method is for testing and is not in the
+   * official API. */
   _getAddonMenu(): Menu | null {
     return this.addonMenu;
   }
