@@ -16,7 +16,7 @@ export function getRepositories(): Repository[] {
   if (unparsedRepos === null) {
     unparsedRepos = "[]";
   }
-  const repos: Repository[] = JSON.parse(unparsedRepos);
+  const repos = JSON.parse(unparsedRepos) as Repository[];
   if (!Array.isArray(repos)) return [];
   return repos;
 }

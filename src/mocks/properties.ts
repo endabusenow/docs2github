@@ -2,7 +2,7 @@
  * https://developers.google.com/apps-script/reference/properties/properties
  */
 export class Properties {
-  propertiesStore: Map<string, string> = new Map();
+  propertiesStore = new Map<string, string>();
 
   setProperty(name: string, value: string): void {
     this.propertiesStore.set(name, value);

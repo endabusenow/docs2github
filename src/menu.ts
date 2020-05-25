@@ -39,14 +39,13 @@ export function updateMenu(authMode: GoogleAppsScript.Script.AuthMode): void {
   menu.addToUi();
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: tsc thinks this function is never read, but it's referred to by
-// the string name instead.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function linkRepositoryCallback(): void {
   Logger.log("Linking repository ", name);
   updateMenu(ScriptApp.AuthMode.FULL);
 }
+
+linkRepositoryCallback; // Disables TypeScript "unused function" warning.
 
 function createExporterCallback(repo_index: number) {
   return function () {
@@ -68,12 +67,11 @@ function createUnlinkerCallback(repo_index: number) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setupRepositoryCallbacks(scope: any) {
   for (let i = 0; i < NUM_MAX_REPOSITORIES; ++i) {
+    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
     scope[exportToGitHubTemplate(i)] = createExporterCallback(i);
     scope[unlinkRepositoryTemplate(i)] = createUnlinkerCallback(i);
+    /* eslint-enable @typescript-eslint/no-unsafe-member-access */
   }
 }
 
-let global;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: No declaration for this type, so it triggers "noImplicitAny"
 setupRepositoryCallbacks(this || global);

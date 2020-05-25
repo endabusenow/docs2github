@@ -14,7 +14,7 @@ class MenuItem {
   /** Calls the function associated with this MenuItem. This method is for
    * testing and not in the official API. */
   _click() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
     (global as any)[this.functionName]();
   }
 }
